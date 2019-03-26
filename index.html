@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RDF-Lifting aus TEI</title>
+
+    <!-- meta information -->
+    <meta name="author" content="Torsten Schrade" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- favicons -->
+    <link rel="shortcut icon" href="resources/img/favicon.png" />
+    <link rel="apple-touch-icon" href="resources/img/apple-touch-icon.png" />
+
+    <!-- CSS reset and grid -->
+    <link href="vendor/normalize/normalize-4.1.1.css" rel="stylesheet" />
+    <link href="vendor/skeleton/skeleton-2.0.4.css" rel="stylesheet" />
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,600,600italic,400italic,700italic,800,800italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+
+    <!-- styles for included libraries -->
+
+    <!-- chartist -->
+    <link rel="stylesheet" href="vendor/chartist/chartist.min-0.9.7.css" />
+
+    <!-- codemirror -->
+    <link rel="stylesheet" href="vendor/codemirror/lib/codemirror.css" />
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="vendor/highlight/styles/default.css" />
+    <link rel="stylesheet" href="resources/css/hljs.linenumbering.css" />
+
+    <!-- magnific popup -->
+    <link rel="stylesheet" href="vendor/magnific-popup/magnific-popup-1.1.0.css" />
+
+    <!-- standard presentation styles -->
+    <link href="resources/css/style.css" rel="stylesheet" />
+
+    <!-- custom presentation styles -->
+    <link href="resources/css/custom.css" rel="stylesheet" />
+
+    <!-- js needed in head -->
+
+    <!-- greuler -->
+    <script src="vendor/d3/d3-3.5.6.js"></script>
+    <script src="vendor/cola/cola.v3.min.js"></script>
+    <script src="vendor/greuler/greuler-0.5.5.min.js"></script>
+
+    <!-- html5 dataset shim for IE -->
+    <script src="vendor/impress/html5-dataset.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <div class="fallback-message">
+        <p>
+            Your browser <strong>doesn’t support the features required</strong> by impress.mod.js,
+            so you are presented with a simplified version of this presentation.
+        </p>
+        <p>
+            For the best experience please use the latest <strong>Chrome</strong>, <strong>Safari</strong>
+            or <strong>Firefox</strong> browser.
+        </p>
+    </div>
+
+    <div id="impress">
+
+        <div class="step">
+            <h4><strong>2019-03-26</strong> | <a href="#">Mainz</a></h4>
+            <h4><strong>DHd 2019 multimedial &amp; multimodal</strong></h4>
+
+            <h1 class="down-100">RDF-Lifting aus TEI</h1>
+
+            <h2 class="red up-25">LOD am Anwendungsbeispiel STURM-Briefe</h2>
+
+            <h4 class="down-100">
+                <strong>Slides:</strong>
+                <a href="#" title="View the presentation online">
+                    Link
+                </a>
+            </h4>
+
+            <h5>
+                <strong><a href="http://www.adwmainz.de/mitarbeiterinnen/profil/julian-jarosch.html">Julian Jarosch</a></strong> |
+                <img src="resources/img/Twitter_bird_logo_2012.svg" alt="Twitter" class="twitter-icon" />
+                <a href="https://twitter.com/digicademy" title="Digital Academy on Twitter">@digicademy</a> |
+                <img src="resources/img/Octicons-mark-github.svg" alt="Twitter" class="gh-icon" />
+                <a href="https://github.com/digicademy/" title="Digital Academy on GitHub">digicademy</a> |
+                <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>
+            </h5>
+        </div>
+
+        <div class="step">
+            <h2>Inhalte</h2>
+            <ol class="line-height-one-five">
+                <li>
+                    Die STURM-Edition 
+                </li>
+                <li>
+                    Pelagios und Peripleo
+                </li>
+                <li>
+                    RDF-Lifting einer <span>Pelagios Dataset Summary</span> aus TEI mit XTriples
+                </li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h1 class="red">01</h1>
+            <h2 class="line-height-one-five">
+                Die STURM-Edition
+            </h2>
+        </div>
+        
+        <div class="step">
+            <h2>Kontext</h2>
+            <p><a href="https://sturm-edition.de">https://sturm-edition.de</a></p>
+            <ul>
+                <li class="substep">Quellenedition zur internationalen Avantgarde</li>
+                <li class="substep">Derzeit 2 Korrespondenzkorpora in TEI ediert</li>
+                <li class="substep">Register:
+                    <ul>
+                        <li class="substep">Personen</li>
+                        <li class="substep">Orte</li>
+                        <li class="substep">Werke</li>
+                    </ul>
+                </li>
+                <li class="substep">Realisiert als <code>&lt;placeName&gt;</code>-Tags in <code>&lt;body&gt;</code></li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h2>Kodierungsbeispiel</h2>
+            <pre>
+                <code class="xml">
+<!--&lt;text type="postcard"&gt;
+    &lt;body&gt;-->
+&lt;p&gt;
+    In einer niederrheinischen Zeitung soll von einer bevorstehenden großen
+    Ausstellung in &lt;placeName key="O.0000045"
+    ref="http://sws.geonames.org/2952539" &gt;Barmen&lt;/placeName&gt; von 
+    &lt;persName key="P.0000009" ref="http://d-nb.info/gnd/118559737"&gt;Kandinsky&lt;/persName&gt;
+    mir u.s.w. berichtet worden sein; […] ich bin natürlich einverstanden,
+    nur soll die frei&lt;hi rend="underline"&gt;e Rück&lt;/hi&gt;fracht
+    &lt;placeName key="O.0000045" ref="http://sws.geonames.org/2952539"
+    &gt;Barmen&lt;/placeName&gt; – &lt;placeName key="O.0000002"
+    ref="http://sws.geonames.org/2950157"&gt;Berlin&lt;/placeName&gt; gesichert sein.
+    Aber es ist natürlich nur Vermutung von mir. Von &lt;persName key="P.0000057"
+    ref="http://d-nb.info/gnd/143669230"&gt;Reiche&lt;/persName&gt; höre ich gar nichts.
+&lt;/p&gt;
+    <!--&lt;/body&gt;
+&lt;/text&gt;-->
+                </code>
+            </pre>
+            <p><a href="https://sturm-edition.de/id/Q.01.19140115.FMA.01">https://sturm-edition.de/id/Q.01.19140115.FMA.01</a></p>
+        </div>
+        
+        <div class="step">
+            <h2>Schnittstellen</h2>
+            <p><a href="https://sturm-edition.de/ressourcen/schnittstellen.html">https://sturm-edition.de/ressourcen/schnittstellen.html</a></p>
+            <ul>
+                <li class="substep">XML-Dateien: <a href="https://sturm-edition.de/api/files">https://sturm-edition.de/api/files</a>
+                <ul>
+                    <li class="substep">Direkt zu Einzeldatei: <a href="https://sturm-edition.de/api/files/Q.01.19150327.FMA.01.xml">https://sturm-edition.de/api/files/Q.01.19150327.FMA.01.xml</a></li>
+                </ul></li>
+                <li class="substep">Briefe: <a href="https://sturm-edition.de/api/letters">https://sturm-edition.de/api/letters</a></li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h1 class="red">02</h1>
+            <h2 class="line-height-one-five">
+                Pelagios und Peripleo
+            </h2>
+        </div>
+        
+        <div class="step">
+            <h2>Kontext</h2>
+            <p><a href="https://peripleo.pelagios.org/ui">https://peripleo.pelagios.org/ui</a></p>
+            <ul>
+                <li class="substep">Erschließungsportal für historische ortsbezogene Daten
+                <ul>
+                    <li class="substep">Ortsverzeichnisse</li>
+                    <li class="substep">Objekte mit Ortsbezug</li>
+                    <li class="substep">Texte mit Ortserwähnungen</li>
+                </ul></li>
+                <li class="substep">Einbindung von Ortserwähnungen aus Partnerprojekten
+                    <ul>
+                        <li class="substep">Bereitstellung von RDF-Beschreibung der Ortserwähnungen seitens der externen Projekte</li>
+                        <li class="substep">Regelmäßiges Einlesen des RDF durch Pelagios</li>
+                    </ul>
+                </li>
+                <li class="substep">Dokumentation des RDF-Formats: <a href="https://github.com/pelagios/pelagios-cookbook/wiki/Joining-Pelagios#minimum-example">https://github.com/pelagios/pelagios-cookbook/wiki/Joining-Pelagios</a></li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h2>Grundstruktur Pelagios Dataset Summary</h2>
+            <h3>Präfixe</h3>
+            <p>Einmalig zu Beginn der RDF-Datei zu deklarieren</p>
+            <pre>
+                <code class="turtle">
+@prefix cnt: &lt;http://www.w3.org/2011/content#&gt; . 
+@prefix dcterms: &lt;http://purl.org/dc/terms/&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix oa: &lt;http://www.w3.org/ns/oa#&gt; .
+@prefix pelagios: &lt;http://pelagios.github.io/vocab/terms#&gt; .
+@prefix relations: &lt;http://pelagios.github.io/vocab/relations#&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema&gt; .
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h2>Grundstruktur Pelagios Dataset Summary</h2>
+            <h3>Beschriebenes Objekt</h3>
+            <p>Wird wiederholt für jedes beschriebene Objekt</p>
+            <pre>
+                <code class="turtle">
+# RDF-Typ
+&lt;http://example.org/pelagios/dump.ttl#items/00l&gt;
+    a pelagios:AnnotatedThing ;
+
+# Notwendige Statements
+    # Titel
+    dcterms:title "Honorific inscription of Ostia" ;
+    # Homepage
+    foaf:homepage &lt;http://edh-www.adw.uni-heidelberg.de/...&gt; ;
+
+# Optionale Statements
+    dcterms:description "Honorific inscription, findspot Ostia" ;
+    dcterms:temporal "366/402" ;
+    dcterms:temporal &lt;http://n2t.net/ark:/99152/p03wskd389m&gt; ;
+    dcterms:language "la" ;
+    dcterms:subject "inscription" ;
+    .
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h2>Grundstruktur Pelagios Dataset Summary</h2>
+            <h3>Ortsbezüge</h3>
+            <p>Wird wiederholt für jeden Ortsbezug von jedem Objekt</p>
+            <pre>
+                <code class="turtle">
+# RDF-Typ
+&lt;http://example.org/pelagios/dump.ttl#items/00l/annotations/01&gt;
+    a oa:Annotation ;
+
+# Notwendige Statements
+    # Verweis auf beschriebenes Objekt
+    oa:hasTarget &lt;http://example.org/pelagios/dump.ttl#items/00l&gt; ;
+    # Verweis auf Geo-Normdatensatz
+    oa:hasBody &lt;http://pleiades.stoa.org/places/422995&gt; ;
+
+# Optionale Statements
+    pelagios:relation relations:foundAt ;
+    oa:hasBody [ cnt:chars "POINT (41.755740099 12.290938199)";
+                 dcterms:format "application/wkt" ] ;
+    oa:annotatedAt "2014-11-05T10:18:00Z"^^xsd:date ;
+    .
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h1 class="red">03</h1>
+            <h2 class="line-height-one-five">
+                RDF-Lifting einer <span>Pelagios Dataset Summary</span> aus TEI
+            </h2>
+        </div>
+        
+        <div class="step">
+            <h2>Generische Grundstruktur XTriples-Konfiguration</h2>
+            <p><a href="https://xtriples.lod.academy/index.html">https://xtriples.lod.academy</a></p>
+            <pre>
+                <code class="xml">
+&lt;xtriples&gt;
+    &lt;configuration&gt;
+        &lt;vocabularies&gt;
+            &lt;vocabulary prefix="###MY_NAMESPACE_PREFIX###" uri="###MY_NAMESPACE_URI###"/&gt;
+            &lt;vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/&gt;
+        &lt;/vocabularies&gt;
+        &lt;triples&gt;
+            &lt;statement&gt;
+                &lt;subject prefix="###MY_NAMESPACE_PREFIX###"&gt;###XPATH###&lt;/subject&gt;
+                &lt;predicate prefix="rdf"&gt;about&lt;/predicate&gt;
+                &lt;object type="literal"&gt;###XPATH###&lt;/object&gt;
+            &lt;/statement&gt;
+        &lt;/triples&gt;
+    &lt;/configuration&gt;
+    &lt;collection uri="###MY_COLLECTION_URI###"&gt;
+        &lt;resources uri="{###XPATH###}"/&gt;
+    &lt;/collection&gt;
+&lt;/xtriples&gt;
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 1</h2>
+            <h3>Einen einzelnen STURM-Brief als Quelle konfigurieren</h3>
+            <pre class="substep">
+                <code class="xml">
+&lt;collection&gt;
+    &lt;resources uri="https://sturm-edition.de/api/files/Q.01.19140115.FMA.01.xml"/&gt;
+&lt;/collection&gt;
+                </code>
+            </pre>
+            <p class="substep">… später kommen wir auf Crawling von Collections zurück!</p>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 1</h2>
+            <h3>Präfixe entsprechend Pelagios definieren</h3>
+            <pre>
+                <code class="xml">
+&lt;vocabularies&gt;
+    &lt;vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/&gt;
+    &lt;vocabulary prefix="cnt" uri="http://www.w3.org/2011/content#"/&gt;
+    &lt;vocabulary prefix="dcterms" uri="http://purl.org/dc/terms/"/&gt;
+    &lt;vocabulary prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/&gt;
+    &lt;vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/&gt;
+    &lt;vocabulary prefix="pelagios" uri="http://pelagios.github.io/vocab/terms#"/&gt;
+    &lt;vocabulary prefix="relations" uri="http://pelagios.github.io/vocab/relations#"/&gt;
+    &lt;vocabulary prefix="xsd" uri="http://www.w3.org/2001/XMLSchema"/&gt;
+&lt;/vocabularies&gt;
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 1</h2>
+            <h3>Weitere Präfixe</h3>
+            <p>Wir wollen XPath für ein TEI-Dokument nutzen – der Namespace muss angegeben werden!</p>
+            <pre class="substep">
+                <code class="xml">
+&lt;vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/&gt;
+                </code>
+            </pre>
+            <p class="substep">Die STURM-URIs haben eine Basis-URL, die auch als Präfix gesetzt werden kann:</p>
+            <pre class="substep">
+                <code>
+&lt;vocabulary prefix="sturm" uri="https://sturm-edition.de/id/"/&gt;
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 2</h2>
+            <h3>Das erste Statement zum beschriebenen Objekt</h3>
+            <p><strong>Subjekt</strong>: URI des STURM-Briefes, bestehend aus der ID des Briefes und dem STURM-Präfix</p>
+            <p>
+                <code class="substep">
+&lt;subject prefix="sturm" type="uri"&gt;/tei:TEI/@xml:id&lt;/subject&gt;
+                </code>
+            </p>
+            <p class="substep"><strong>Prädikat</strong>: RDF-type</p>
+            <p>
+                <code class="substep">
+&lt;predicate prefix="rdf"&gt;type&lt;/predicate&gt;
+                </code>
+            </p>
+            <p class="substep"><strong>Objekt</strong>: ein Pelagios-AnnotatedThing</p>
+            <p>
+                <code class="substep">
+&lt;object prefix="pelagios" type="uri"&gt;AnnotatedThing&lt;/object&gt;
+                </code>
+            </p>
+        </div>
+        
+        <div class="step">
+            <pre>
+                <code>
+&lt;xtriples&gt;
+    &lt;configuration&gt;
+        &lt;vocabularies&gt;
+            &lt;vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/&gt;
+            &lt;vocabulary prefix="sturm" uri="https://sturm-edition.de/id/"/&gt;
+            &lt;vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/&gt;
+            &lt;vocabulary prefix="cnt" uri="http://www.w3.org/2011/content#"/&gt;
+            &lt;vocabulary prefix="dcterms" uri="http://purl.org/dc/terms/"/&gt;
+            &lt;vocabulary prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/&gt;
+            &lt;vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/&gt;
+            &lt;vocabulary prefix="pelagios" uri="http://pelagios.github.io/vocab/terms#"/&gt;
+            &lt;vocabulary prefix="relations" uri="http://pelagios.github.io/vocab/relations#"/&gt;
+            &lt;vocabulary prefix="xsd" uri="http://www.w3.org/2001/XMLSchema"/&gt;
+        &lt;/vocabularies&gt;
+        &lt;triples&gt;
+            &lt;statement&gt;
+                &lt;subject prefix="sturm" type="uri"&gt;/tei:TEI/@xml:id&lt;/subject&gt;
+                &lt;predicate prefix="rdf"&gt;type&lt;/predicate&gt;
+                &lt;object prefix="pelagios" type="uri"&gt;AnnotatedThing&lt;/object&gt;
+            &lt;/statement&gt;
+        &lt;/triples&gt;
+    &lt;/configuration&gt;
+    &lt;collection&gt;
+        &lt;resource uri="https://sturm-edition.de/api/files/Q.01.19150315.FMA.02.xml"/&gt;
+    &lt;/collection&gt;
+&lt;/xtriples&gt;
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 2</h2>
+            <h3>Notwendige Statements</h3>
+            <p>Subjekt ist weiterhin das beschriebene Objekt – der STURM-Brief</p>
+            <ul>
+                <li><strong>dcterms:title</strong>: Titel des Dokuments</li>
+                <li><strong>foaf:homepage</strong>: Web-Präsentation des Briefes</li>
+            </ul>
+            <pre class="substep">
+                <code>
+&lt;statement&gt;
+    &lt;subject prefix="sturm" type="uri"&gt;/tei:TEI/@xml:id&lt;/subject&gt;
+    &lt;predicate prefix="dcterms"&gt;title&lt;/predicate&gt;
+    &lt;object type="literal"&gt;/normalize-space(./tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title)&lt;/object&gt;
+&lt;/statement&gt;
+&lt;statement&gt;
+    &lt;subject prefix="sturm" type="uri"&gt;/tei:TEI/@xml:id&lt;/subject&gt;
+    &lt;predicate prefix="foaf"&gt;homepage&lt;/predicate&gt;
+    &lt;!-- Hier wird die in der Datei kodierte URI verwendet; de facto identisch mit der &lt;subject&gt;-URI --&gt;
+    &lt;object type="uri"&gt;/tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[@type="uri"]&lt;/object&gt;
+&lt;/statement&gt;
+                </code>
+            </pre>
+            <p class="substep"><a href="https://xtriples.lod.academy/extract.xql?configuration=https://xtriples.lod.academy/examples/dh/dhd2019/sturm1.xml&amp;format=svg">Ergebnis</a></p>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 3</h2>
+            <h3>Das erste Statement zur Ortserwähnung</h3>
+            <ul>
+                <li><strong>Subjekt</strong>: URI des STURM-Ortes</li>
+                <li><strong>Prädikat</strong>: rdf:type</li>
+                <li><strong>Objekt</strong>: oa:Annotation</li>
+            </ul>
+            <pre class="substep">
+                <code>
+&lt;statement&gt;
+    &lt;subject prefix="sturm" type="uri"&gt;/tei:TEI/tei:text/tei:body//tei:placeName/@key&lt;/subject&gt;
+    &lt;predicate prefix="rdf"&gt;type&lt;/predicate&gt;
+    &lt;object prefix="oa" type="uri"&gt;Annotation&lt;/object&gt;
+&lt;/statement&gt;
+                </code>
+            </pre>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 3</h2>
+            <h3>Das zweite Statement zur Ortserwähnung</h3>
+            <p>Subjekt ist weiterhin die Annotation – die Ortserwähnung</p>
+            <ul>
+                <li><strong>Prädikat</strong>: oa:hasTarget</li>
+                <li><strong>Objekt</strong>: das beschriebene Objekt – der Brief</li>
+            </ul>
+            <pre class="substep">
+                <code>
+&lt;statement&gt;
+    &lt;subject prefix="sturm" type="uri"&gt;/tei:TEI/tei:text/tei:body//tei:placeName/@key&lt;/subject&gt;
+    &lt;predicate prefix="oa"&gt;hasTarget&lt;/predicate&gt;
+    &lt;object prefix="sturm" type="uri"&gt;/tei:TEI/@xml:id&lt;/object&gt;
+&lt;/statement&gt;
+                </code>
+            </pre>
+            <p class="substep"><a href="https://xtriples.lod.academy/extract.xql?configuration=https://xtriples.lod.academy/examples/dh/dhd2019/sturm2.xml&amp;format=svg">Ergebnis</a></p>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 3</h2>
+            <h3>1:1-Zuordnung von Ortserwähnung zu Geo-Normdatum</h3>
+            <p>Subjekt ist weiterhin die Annotation – die Ortserwähnung</p>
+            <ul>
+                <li><strong>Prädikat</strong>: oa:hasBody</li>
+                <li><strong>Objekt</strong>: Geo-Normdaten-URI des Ortes</li>
+            </ul>
+            <p class="substep"><a href="https://xtriples.lod.academy/extract.xql?configuration=https://xtriples.lod.academy/examples/dh/dhd2019/sturm3.xml&amp;format=svg">¿?¿?¿?¿?</a></p>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 3</h2>
+            <h3>1:1-Zuordnung von Ortserwähnung zu Geo-Normdatum</h3>
+            <p>Für die eindeutige 1:1-Zuordnung eines <code class="xml">&lt;placeName&gt;</code> zu einer Geo-URI brauchen wir eine Iteration:</p>
+            <pre>
+                <code class="xml">
+&lt;statement repeat="{/count(./tei:TEI/tei:text/tei:body//tei:placeName[@ref])}"&gt;
+                </code>
+            </pre>
+            <div class="substep"><p>… die dann mit der Variable <code>$repeatIndex</code> wieder aufgegriffen wird:</p>
+            <pre>
+                <code>
+&lt;subject prefix="sturm" type="uri"&gt;/(tei:TEI/tei:text/tei:body//tei:placeName)[$repeatIndex]/@key&lt;/subject&gt;
+                </code>
+            </pre></div>
+        </div>
+        
+        <div class="step">
+            <h2>Schritt 4</h2>
+            <h3>Crawling</h3>
+            <p>Voraussetzung ist eine XML-Liste der Ressourcen, z.B. aus einer REST-Schnittstelle</p>
+            <pre>
+                <code class=">xml">
+&lt;collection uri="https://sturm-edition.de/api/letters" max="7"&gt;
+                </code>
+            </pre>
+            <div class="substep">
+                <p>Aus dieser Liste können mit XPath Ressourcen-Namen extrahiert und mit einer Basis-URL kombiniert werden</p>
+                <pre>
+                    <code class="xml">
+&lt;resource uri="https://sturm-edition.de/api/files/{/tei:TEI/tei:text/tei:body/tei:div/tei:list[@n='letters']//tei:item[@n='letter']/@xml:id}.xml" /&gt;
+                    </code>
+                </pre>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h2>Eine mögliche weitgehend vollständige Konfiguration</h2>
+            <p><a href="https://xtriples.lod.academy/examples/dh/dhd2019/sturm.xml">Kofiguration</a></p>
+            <p><a href="https://xtriples.lod.academy/extract.xql?configuration=https://xtriples.lod.academy/examples/dh/dhd2019/sturm.xml&amp;format=svg">Ergebnis</a></p>
+        </div>
+
+        <div class="step">
+            <div class="centered">
+                <h1>F I N I S</h1>
+                <h2>Thank you</h2>
+            </div>
+        </div>
+
+        <!--<div class="step">
+
+            <h2>Literature &amp; Software</h2>
+
+            <h4>Literature</h4>
+
+            <ul class="small">
+                <li>
+                    One
+                </li>
+                <li>
+                    Two
+                </li>
+                <li>
+                    Three
+                </li>
+            </ul>
+
+            <h4>Software</h4>
+
+            <ul class="small">
+                <li>
+                    One
+                </li>
+                <li>
+                   Two
+                </li>
+                <li>
+                    Three
+                </li>
+            </ul>
+
+            <h4>Download</h4>
+            <ul class="small">
+                <li>
+                    <a href="#">
+                        Link to presentation
+                    </a>
+                </li>
+                <li>
+                    License: <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>, Author
+                </li>
+            </ul>
+        </div>-->
+
+    </div>
+
+    <!-- jquery -->
+    <script src="vendor/jquery/jquery-1.11.0.min.js"></script>
+
+    <!-- chartist -->
+    <script src="vendor/chartist/chartist.min-0.9.7.js"></script>
+    <script src="resources/js/chartist.charts.js"></script>
+
+    <!-- codemirror -->
+    <script src="vendor/codemirror/lib/codemirror.js"></script>
+    <script src="vendor/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="vendor/codemirror/mode/sparql/sparql.js"></script>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("sparql"), {
+            mode: "application/sparql-query",
+            matchBrackets: true,
+            lineNumbers: true,
+            viewportMargin: Infinity
+        });
+    </script>
+
+    <!-- highlight -->
+    <script src="vendor/highlight/highlight.pack-9.3.0.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="resources/js/hljs.linenumbering.js"></script>
+
+    <!-- magnific popup -->
+    <script src="vendor/magnific-popup/jquery.magnific-popup.min-1.1.0.js"></script>
+    <script src="resources/js/magnific-popup.lightbox.js"></script>
+
+    <!-- impress.mod.js -->
+    <script src="vendor/impress/impress.fork.js"></script>
+    <script src="vendor/impress/impress-slidenum.js"></script>
+    <script>
+        var obj = impress();
+        obj.init();
+        initSlideNo(obj);
+    </script>
+
+</body>
+</html>
