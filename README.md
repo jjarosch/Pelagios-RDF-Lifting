@@ -1,10 +1,12 @@
-### Date | Place
+### 2019-03-26 | Mainz
 
-# Title
+# RDF-Lifting aus TEI
 
-## Subtitle
+## LOD am Anwendungsbeispiel STURM-Briefe
 
-### Author
+### Julian Jarosch
+
+https://jjarosch.github.io/Pelagios-RDF-Lifting/
 
 Description
 
